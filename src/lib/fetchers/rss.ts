@@ -34,9 +34,9 @@ export async function fetchRSSSource(
             data: {
               title: item.title.trim(),
               url: item.link,
-              author: item.creator || item.author || null,
+              author: item.creator || (item as unknown as Record<string, string>).author || null,
               content:
-                (item as Record<string, string>).contentEncoded ||
+                (item as unknown as Record<string, string>).contentEncoded ||
                 item.contentSnippet ||
                 item.content ||
                 null,
