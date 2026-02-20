@@ -47,7 +47,6 @@ export async function fetchDevtoArticles(
               title: article.title,
               url: article.url,
               author: article.user.name,
-              content: article.description,
               sourceId,
               categories: "[]",
               publishedAt: new Date(article.published_at),

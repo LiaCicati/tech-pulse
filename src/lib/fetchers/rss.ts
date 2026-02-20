@@ -8,9 +8,6 @@ const parser = new Parser({
   headers: {
     "User-Agent": "TechPulse/1.0",
   },
-  customFields: {
-    item: [["content:encoded", "contentEncoded"]],
-  },
 });
 
 const cutoffDate = () => {
@@ -49,11 +46,6 @@ export async function fetchRSSSource(
               title: item.title.trim(),
               url: item.link,
               author: item.creator || (item as unknown as Record<string, string>).author || null,
-              content:
-                (item as unknown as Record<string, string>).contentEncoded ||
-                item.contentSnippet ||
-                item.content ||
-                null,
               sourceId,
               categories: "[]",
               publishedAt: item.pubDate ? new Date(item.pubDate) : null,

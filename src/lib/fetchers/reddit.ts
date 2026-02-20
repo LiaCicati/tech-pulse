@@ -59,7 +59,6 @@ export async function fetchRedditSubreddit(
               title: post.title,
               url: articleUrl,
               author: post.author,
-              content: post.selftext || null,
               sourceId,
               categories: "[]",
               publishedAt: new Date(post.created_utc * 1000),
