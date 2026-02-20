@@ -2,25 +2,15 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
+// Only official news, releases, announcements, and industry reporting.
+// No personal blogs, community posts, or opinion pieces.
 const sources = [
-  // ── Curated aggregators & newsletters (high signal-to-noise) ──────────
+  // ── Curated industry newsletters (editors pick real news) ─────────────
   {
-    name: "Hacker News (Front Page)",
-    url: "https://hnrss.org/frontpage",
+    name: "TLDR Newsletter",
+    url: "https://tldr.tech/api/rss/tech",
     type: "RSS",
     categories: JSON.stringify(["SOFTWARE_ENGINEERING", "AI"]),
-  },
-  {
-    name: "InfoQ",
-    url: "https://feed.infoq.com/",
-    type: "RSS",
-    categories: JSON.stringify(["SOFTWARE_ENGINEERING", "ARCHITECTURE"]),
-  },
-  {
-    name: "The Pragmatic Engineer",
-    url: "https://newsletter.pragmaticengineer.com/feed",
-    type: "RSS",
-    categories: JSON.stringify(["SOFTWARE_ENGINEERING", "WORKFLOWS"]),
   },
   {
     name: "JavaScript Weekly",
@@ -35,44 +25,74 @@ const sources = [
     categories: JSON.stringify(["BACKEND", "SOFTWARE_ENGINEERING"]),
   },
   {
-    name: "TLDR Newsletter",
-    url: "https://tldr.tech/api/rss/tech",
+    name: "Frontend Focus",
+    url: "https://frontendfoc.us/rss",
+    type: "RSS",
+    categories: JSON.stringify(["WEB_DEV", "UX"]),
+  },
+  {
+    name: "React Status",
+    url: "https://react.statuscode.com/rss",
+    type: "RSS",
+    categories: JSON.stringify(["WEB_DEV"]),
+  },
+
+  // ── Industry news & journalism ────────────────────────────────────────
+  {
+    name: "InfoQ",
+    url: "https://feed.infoq.com/",
+    type: "RSS",
+    categories: JSON.stringify(["SOFTWARE_ENGINEERING", "ARCHITECTURE"]),
+  },
+  {
+    name: "The Verge - Tech",
+    url: "https://www.theverge.com/rss/tech/index.xml",
     type: "RSS",
     categories: JSON.stringify(["SOFTWARE_ENGINEERING", "AI"]),
   },
   {
-    name: "Dev.to Top Articles",
-    url: "https://dev.to/api/articles",
-    type: "API",
+    name: "Ars Technica - Technology",
+    url: "https://feeds.arstechnica.com/arstechnica/technology-lab",
+    type: "RSS",
+    categories: JSON.stringify(["SOFTWARE_ENGINEERING", "AI"]),
+  },
+  {
+    name: "TechCrunch",
+    url: "https://techcrunch.com/feed/",
+    type: "RSS",
+    categories: JSON.stringify(["SOFTWARE_ENGINEERING", "AI"]),
+  },
+
+  // ── Official project & platform announcements ─────────────────────────
+  {
+    name: "GitHub Blog",
+    url: "https://github.blog/feed/",
+    type: "RSS",
+    categories: JSON.stringify(["SOFTWARE_ENGINEERING", "WORKFLOWS"]),
+  },
+  {
+    name: "Vercel Blog",
+    url: "https://vercel.com/atom",
+    type: "RSS",
     categories: JSON.stringify(["WEB_DEV", "SOFTWARE_ENGINEERING"]),
   },
-
-  // ── Architecture & software design ────────────────────────────────────
   {
-    name: "Martin Fowler",
-    url: "https://martinfowler.com/feed.atom",
+    name: "Node.js Blog",
+    url: "https://nodejs.org/en/feed/blog.xml",
     type: "RSS",
-    categories: JSON.stringify(["ARCHITECTURE", "SOFTWARE_ENGINEERING"]),
+    categories: JSON.stringify(["BACKEND", "SOFTWARE_ENGINEERING"]),
   },
   {
-    name: "ByteByteGo",
-    url: "https://blog.bytebytego.com/feed",
+    name: "TypeScript Blog",
+    url: "https://devblogs.microsoft.com/typescript/feed/",
     type: "RSS",
-    categories: JSON.stringify(["ARCHITECTURE", "BACKEND"]),
-  },
-
-  // ── Web development & frontend ────────────────────────────────────────
-  {
-    name: "Smashing Magazine",
-    url: "https://www.smashingmagazine.com/feed/",
-    type: "RSS",
-    categories: JSON.stringify(["WEB_DEV", "UX"]),
+    categories: JSON.stringify(["WEB_DEV", "SOFTWARE_ENGINEERING"]),
   },
   {
-    name: "CSS-Tricks",
-    url: "https://css-tricks.com/feed/",
+    name: "Chrome for Developers",
+    url: "https://developer.chrome.com/blog/feed.xml",
     type: "RSS",
-    categories: JSON.stringify(["WEB_DEV", "UX"]),
+    categories: JSON.stringify(["WEB_DEV"]),
   },
   {
     name: "web.dev",
@@ -81,22 +101,22 @@ const sources = [
     categories: JSON.stringify(["WEB_DEV", "UX"]),
   },
   {
-    name: "Josh W. Comeau",
-    url: "https://www.joshwcomeau.com/rss.xml",
-    type: "RSS",
-    categories: JSON.stringify(["WEB_DEV", "UX"]),
-  },
-
-  // ── Backend & systems ─────────────────────────────────────────────────
-  {
-    name: "Netflix Tech Blog",
-    url: "https://netflixtechblog.com/feed",
+    name: "Cloudflare Blog",
+    url: "https://blog.cloudflare.com/rss",
     type: "RSS",
     categories: JSON.stringify(["BACKEND", "ARCHITECTURE"]),
   },
   {
-    name: "Uber Engineering",
-    url: "https://www.uber.com/en-US/blog/engineering/rss/",
+    name: "Docker Blog",
+    url: "https://www.docker.com/feed/",
+    type: "RSS",
+    categories: JSON.stringify(["BACKEND", "WORKFLOWS"]),
+  },
+
+  // ── Engineering at scale (official company engineering news) ───────────
+  {
+    name: "Netflix Tech Blog",
+    url: "https://netflixtechblog.com/feed",
     type: "RSS",
     categories: JSON.stringify(["BACKEND", "ARCHITECTURE"]),
   },
@@ -106,26 +126,8 @@ const sources = [
     type: "RSS",
     categories: JSON.stringify(["BACKEND", "SOFTWARE_ENGINEERING"]),
   },
-  {
-    name: "Cloudflare Blog",
-    url: "https://blog.cloudflare.com/rss",
-    type: "RSS",
-    categories: JSON.stringify(["BACKEND", "ARCHITECTURE"]),
-  },
-  {
-    name: "GitHub Engineering",
-    url: "https://github.blog/engineering.atom",
-    type: "RSS",
-    categories: JSON.stringify(["SOFTWARE_ENGINEERING", "WORKFLOWS"]),
-  },
 
   // ── Testing & QA ──────────────────────────────────────────────────────
-  {
-    name: "Ministry of Testing",
-    url: "https://www.ministryoftesting.com/feeds/blogs",
-    type: "RSS",
-    categories: JSON.stringify(["TESTING_QA"]),
-  },
   {
     name: "Google Testing Blog",
     url: "https://testing.googleblog.com/feeds/posts/default",
@@ -133,7 +135,7 @@ const sources = [
     categories: JSON.stringify(["TESTING_QA", "SOFTWARE_ENGINEERING"]),
   },
 
-  // ── UX & design ──────────────────────────────────────────────────────
+  // ── UX & design standards ─────────────────────────────────────────────
   {
     name: "Nielsen Norman Group",
     url: "https://www.nngroup.com/feed/rss/",
@@ -141,13 +143,13 @@ const sources = [
     categories: JSON.stringify(["UX"]),
   },
   {
-    name: "A List Apart",
-    url: "https://alistapart.com/main/feed/",
+    name: "Smashing Magazine",
+    url: "https://www.smashingmagazine.com/feed/",
     type: "RSS",
-    categories: JSON.stringify(["UX", "WEB_DEV"]),
+    categories: JSON.stringify(["WEB_DEV", "UX"]),
   },
 
-  // ── AI & ML ───────────────────────────────────────────────────────────
+  // ── AI announcements & news ───────────────────────────────────────────
   {
     name: "OpenAI Blog",
     url: "https://openai.com/blog/rss.xml",
@@ -161,10 +163,10 @@ const sources = [
     categories: JSON.stringify(["AI"]),
   },
   {
-    name: "Simon Willison",
-    url: "https://simonwillison.net/atom/everything/",
+    name: "Google AI Blog",
+    url: "https://blog.google/technology/ai/rss/",
     type: "RSS",
-    categories: JSON.stringify(["AI", "SOFTWARE_ENGINEERING"]),
+    categories: JSON.stringify(["AI"]),
   },
   {
     name: "The Verge - AI",
@@ -173,21 +175,33 @@ const sources = [
     categories: JSON.stringify(["AI"]),
   },
 
-  // ── Workflows & developer productivity ────────────────────────────────
+  // ── Architecture & industry standards ─────────────────────────────────
   {
-    name: "Thoughtworks Technology Radar",
+    name: "ThoughtWorks Insights",
     url: "https://www.thoughtworks.com/rss/insights.xml",
     type: "RSS",
-    categories: JSON.stringify(["WORKFLOWS", "ARCHITECTURE"]),
+    categories: JSON.stringify(["ARCHITECTURE", "WORKFLOWS"]),
   },
 ];
 
-// Sources to deactivate (too noisy or duplicate)
+// Sources to deactivate (blog posts, community content, personal opinions)
 const deactivateUrls = [
-  "https://dev.to/feed", // duplicate of Dev.to API
-  "https://www.reddit.com/r/programming/.json", // noisy
-  "https://www.reddit.com/r/webdev/.json", // noisy
-  "https://www.reddit.com/r/ExperiencedDevs/.json", // noisy, mostly self-posts
+  "https://dev.to/feed",
+  "https://dev.to/api/articles",
+  "https://www.reddit.com/r/programming/.json",
+  "https://www.reddit.com/r/webdev/.json",
+  "https://www.reddit.com/r/ExperiencedDevs/.json",
+  "https://hnrss.org/frontpage",
+  "https://martinfowler.com/feed.atom",
+  "https://css-tricks.com/feed/",
+  "https://newsletter.pragmaticengineer.com/feed",
+  "https://blog.bytebytego.com/feed",
+  "https://www.joshwcomeau.com/rss.xml",
+  "https://www.uber.com/en-US/blog/engineering/rss/",
+  "https://github.blog/engineering.atom",
+  "https://www.ministryoftesting.com/feeds/blogs",
+  "https://alistapart.com/main/feed/",
+  "https://simonwillison.net/atom/everything/",
 ];
 
 async function main() {
@@ -202,7 +216,7 @@ async function main() {
     });
   }
 
-  // Deactivate noisy/duplicate sources (keeps their articles but stops fetching)
+  // Deactivate blog/community sources
   for (const url of deactivateUrls) {
     await prisma.source.updateMany({
       where: { url },
@@ -211,9 +225,8 @@ async function main() {
   }
 
   const activeCount = await prisma.source.count({ where: { active: true } });
-  console.log(
-    `Seeded ${sources.length} sources (${activeCount} active). Deactivated ${deactivateUrls.length} noisy sources.`
-  );
+  const totalCount = await prisma.source.count();
+  console.log(`Done. ${activeCount} active sources out of ${totalCount} total.`);
 }
 
 main()
