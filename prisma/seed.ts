@@ -16,13 +16,13 @@ const sources = [
     name: "JavaScript Weekly",
     url: "https://javascriptweekly.com/rss",
     type: "RSS",
-    categories: JSON.stringify(["WEB_DEV", "SOFTWARE_ENGINEERING"]),
+    categories: JSON.stringify(["WEB_DEV", "FRAMEWORKS"]),
   },
   {
     name: "Node Weekly",
     url: "https://nodeweekly.com/rss",
     type: "RSS",
-    categories: JSON.stringify(["BACKEND", "SOFTWARE_ENGINEERING"]),
+    categories: JSON.stringify(["BACKEND"]),
   },
   {
     name: "Frontend Focus",
@@ -34,7 +34,7 @@ const sources = [
     name: "React Status",
     url: "https://react.statuscode.com/rss",
     type: "RSS",
-    categories: JSON.stringify(["WEB_DEV"]),
+    categories: JSON.stringify(["REACT_NEXTJS"]),
   },
 
   // ── Industry news & journalism ────────────────────────────────────────
@@ -63,7 +63,97 @@ const sources = [
     categories: JSON.stringify(["SOFTWARE_ENGINEERING", "AI"]),
   },
 
-  // ── Official project & platform announcements ─────────────────────────
+  // ── React, Next.js & related ──────────────────────────────────────────
+  {
+    name: "React Blog",
+    url: "https://react.dev/rss.xml",
+    type: "RSS",
+    categories: JSON.stringify(["REACT_NEXTJS", "FRAMEWORKS"]),
+  },
+  {
+    name: "Vercel Blog",
+    url: "https://vercel.com/atom",
+    type: "RSS",
+    categories: JSON.stringify(["REACT_NEXTJS", "FRAMEWORKS"]),
+  },
+  {
+    name: "Next.js Blog",
+    url: "https://nextjs.org/feed.xml",
+    type: "RSS",
+    categories: JSON.stringify(["REACT_NEXTJS", "FRAMEWORKS"]),
+  },
+
+  // ── Modern frameworks ─────────────────────────────────────────────────
+  {
+    name: "Astro Blog",
+    url: "https://astro.build/rss.xml",
+    type: "RSS",
+    categories: JSON.stringify(["FRAMEWORKS", "WEB_DEV"]),
+  },
+  {
+    name: "Svelte Blog",
+    url: "https://svelte.dev/blog/rss.xml",
+    type: "RSS",
+    categories: JSON.stringify(["FRAMEWORKS", "WEB_DEV"]),
+  },
+  {
+    name: "Angular Blog",
+    url: "https://blog.angular.dev/feed",
+    type: "RSS",
+    categories: JSON.stringify(["FRAMEWORKS", "WEB_DEV"]),
+  },
+  {
+    name: "Vue.js Blog",
+    url: "https://blog.vuejs.org/feed.rss",
+    type: "RSS",
+    categories: JSON.stringify(["FRAMEWORKS", "WEB_DEV"]),
+  },
+  {
+    name: "Deno Blog",
+    url: "https://deno.com/feed",
+    type: "RSS",
+    categories: JSON.stringify(["FRAMEWORKS", "BACKEND"]),
+  },
+  {
+    name: "Bun Blog",
+    url: "https://bun.sh/blog/rss.xml",
+    type: "RSS",
+    categories: JSON.stringify(["FRAMEWORKS", "BACKEND"]),
+  },
+
+  // ── CMS platforms ─────────────────────────────────────────────────────
+  {
+    name: "Sanity Blog",
+    url: "https://www.sanity.io/feed/blog/rss",
+    type: "RSS",
+    categories: JSON.stringify(["CMS", "WEB_DEV"]),
+  },
+  {
+    name: "Strapi Blog",
+    url: "https://strapi.io/blog/rss.xml",
+    type: "RSS",
+    categories: JSON.stringify(["CMS", "WEB_DEV"]),
+  },
+  {
+    name: "Contentful Blog",
+    url: "https://www.contentful.com/blog/feed.xml",
+    type: "RSS",
+    categories: JSON.stringify(["CMS", "WEB_DEV"]),
+  },
+  {
+    name: "WordPress News",
+    url: "https://wordpress.org/news/feed/",
+    type: "RSS",
+    categories: JSON.stringify(["CMS"]),
+  },
+  {
+    name: "Payload CMS Blog",
+    url: "https://payloadcms.com/blog/rss.xml",
+    type: "RSS",
+    categories: JSON.stringify(["CMS", "REACT_NEXTJS"]),
+  },
+
+  // ── Official platform announcements ───────────────────────────────────
   {
     name: "GitHub Blog",
     url: "https://github.blog/feed/",
@@ -71,22 +161,16 @@ const sources = [
     categories: JSON.stringify(["SOFTWARE_ENGINEERING", "WORKFLOWS"]),
   },
   {
-    name: "Vercel Blog",
-    url: "https://vercel.com/atom",
-    type: "RSS",
-    categories: JSON.stringify(["WEB_DEV", "SOFTWARE_ENGINEERING"]),
-  },
-  {
     name: "Node.js Blog",
     url: "https://nodejs.org/en/feed/blog.xml",
     type: "RSS",
-    categories: JSON.stringify(["BACKEND", "SOFTWARE_ENGINEERING"]),
+    categories: JSON.stringify(["BACKEND"]),
   },
   {
     name: "TypeScript Blog",
     url: "https://devblogs.microsoft.com/typescript/feed/",
     type: "RSS",
-    categories: JSON.stringify(["WEB_DEV", "SOFTWARE_ENGINEERING"]),
+    categories: JSON.stringify(["WEB_DEV", "FRAMEWORKS"]),
   },
   {
     name: "Chrome for Developers",
@@ -113,7 +197,7 @@ const sources = [
     categories: JSON.stringify(["BACKEND", "WORKFLOWS"]),
   },
 
-  // ── Engineering at scale (official company engineering news) ───────────
+  // ── Engineering at scale ──────────────────────────────────────────────
   {
     name: "Netflix Tech Blog",
     url: "https://netflixtechblog.com/feed",
