@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Source {
+  id            String    @id @default(cuid())
+  name          String
+  url           String    @unique
+  type          String    // "RSS" or "API"
+  categories    String    // JSON array stored as string (SQLite has no array type)
+  active        Boolean   @default(true)
+  lastFetchedAt DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  articles      Article[]
+}
+
+model Article {
+  id             String          @id @default(cuid())
+  title          String
+  url            String          @unique
+  author         String?
+  content        String?
+  summary        String?
+  keyTakeaways   String?         // JSON array stored as string
+  categories     String          @default("[]") // JSON array stored as string
+  sourceId       String
+  source         Source           @relation(fields: [sourceId], references: [id])
+  publishedAt    DateTime?
+  fetchedAt      DateTime         @default(now())
+  summarizedAt   DateTime?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  bookmarks      Bookmark[]
+  digestArticles DigestArticle[]
+
+  @@index([publishedAt(sort: Desc)])
+  @@index([fetchedAt(sort: Desc)])
+}
+
+model Bookmark {
+  id        String   @id @default(cuid())
+  articleId String   @unique
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Digest {
+  id        String          @id @default(cuid())
+  title     String
+  shared    Boolean         @default(false)
+  shareSlug String?         @unique
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  articles  DigestArticle[]
+}
+
+model DigestArticle {
+  id        String  @id @default(cuid())
+  digestId  String
+  digest    Digest  @relation(fields: [digestId], references: [id], onDelete: Cascade)
+  articleId String
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  order     Int     @default(0)
+
+  @@unique([digestId, articleId])
+}
