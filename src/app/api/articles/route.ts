@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
   const dateFrom = params.get("dateFrom");
   const dateTo = params.get("dateTo");
   const page = parseInt(params.get("page") || "1");
-  const pageSize = Math.min(parseInt(params.get("pageSize") || "20"), 50);
+  const pageSize = Math.min(parseInt(params.get("pageSize") || "12"), 50);
   const sortBy = params.get("sortBy") || "publishedAt";
   const sortOrder = params.get("sortOrder") || "desc";
 
@@ -20,7 +20,6 @@ export async function GET(request: NextRequest) {
   if (search) {
     where.OR = [
       { title: { contains: search } },
-      { content: { contains: search } },
       { author: { contains: search } },
     ];
   }
