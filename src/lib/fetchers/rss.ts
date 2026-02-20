@@ -1,5 +1,6 @@
 import Parser from "rss-parser";
 import { prisma } from "@/lib/prisma";
+import { RETENTION_DAYS } from "@/lib/fetchers/retention";
 import type { FetchResult } from "@/types";
 
 const parser = new Parser({
@@ -12,17 +13,30 @@ const parser = new Parser({
   },
 });
 
+const cutoffDate = () => {
+  const d = new Date();
+  d.setDate(d.getDate() - RETENTION_DAYS);
+  return d;
+};
+
 export async function fetchRSSSource(
   sourceId: string,
   feedUrl: string
 ): Promise<FetchResult> {
   const result: FetchResult = { source: feedUrl, newArticles: 0, errors: [] };
+  const cutoff = cutoffDate();
 
   try {
     const feed = await parser.parseURL(feedUrl);
 
     for (const item of feed.items) {
       if (!item.link || !item.title) continue;
+
+      // Skip articles older than retention period
+      if (item.pubDate) {
+        const pubDate = new Date(item.pubDate);
+        if (pubDate < cutoff) continue;
+      }
 
       try {
         const existing = await prisma.article.findUnique({
