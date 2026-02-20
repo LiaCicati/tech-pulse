@@ -7,6 +7,14 @@ import type { ArticleFull } from "@/types";
 import clsx from "clsx";
 import { useState } from "react";
 
+function timeAgo(date: Date): string {
+  const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
+  if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
+  if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
+  if (seconds < 604800) return `${Math.floor(seconds / 86400)}d ago`;
+  return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+}
+
 export function ArticleCard({ article }: { article: ArticleFull }) {
   const articleCategories = parseCategories(article.categories);
   const sourceCategories = parseCategories(article.source.categories);
@@ -35,69 +43,62 @@ export function ArticleCard({ article }: { article: ArticleFull }) {
       href={article.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="block bg-white rounded-lg border border-gray-200 p-5 hover:shadow-md hover:border-gray-300 transition-all group"
+      className="block bg-white rounded-xl border border-gray-100 px-5 py-4 hover:shadow-lg hover:border-gray-200 hover:-translate-y-0.5 transition-all group"
     >
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
-            <span className="font-semibold text-gray-700">
-              {article.source.name}
-            </span>
-            {article.publishedAt && (
-              <>
-                <span>&middot;</span>
-                <time>
-                  {new Date(article.publishedAt).toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                  })}
-                </time>
-              </>
-            )}
-            {article.author && (
-              <>
-                <span>&middot;</span>
-                <span className="truncate">{article.author}</span>
-              </>
-            )}
-          </div>
-          <h3 className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2 leading-snug">
-            {article.title}
-          </h3>
-          <div className="flex flex-wrap gap-1 mt-3">
-            {effectiveCategories.map((cat: Category) => (
-              <span
-                key={cat}
-                className={clsx(
-                  "text-xs px-2 py-0.5 rounded-full",
-                  CATEGORY_COLORS[cat]
-                )}
-              >
-                {CATEGORY_LABELS[cat]}
-              </span>
-            ))}
-          </div>
+      {/* Top row: source + time + bookmark */}
+      <div className="flex items-center justify-between mb-2.5">
+        <div className="flex items-center gap-2 text-xs text-gray-400">
+          <span className="font-medium text-gray-500">
+            {article.source.name}
+          </span>
+          {article.publishedAt && (
+            <>
+              <span>&middot;</span>
+              <time>{timeAgo(new Date(article.publishedAt))}</time>
+            </>
+          )}
         </div>
-        <div className="flex flex-col items-center gap-2 shrink-0 pt-1">
-          <button
-            onClick={toggleBookmark}
-            className="p-1.5 rounded-md hover:bg-gray-100 cursor-pointer"
-            title={bookmarked ? "Remove bookmark" : "Bookmark"}
-          >
-            <Bookmark
-              size={18}
-              className={clsx(
-                bookmarked
-                  ? "fill-yellow-500 text-yellow-500"
-                  : "text-gray-300 group-hover:text-gray-400"
-              )}
-            />
-          </button>
-          <ExternalLink
-            size={14}
-            className="text-gray-300 group-hover:text-gray-400"
+        <button
+          onClick={toggleBookmark}
+          className="p-1 rounded-md hover:bg-gray-100 cursor-pointer -mr-1"
+          title={bookmarked ? "Remove bookmark" : "Bookmark"}
+        >
+          <Bookmark
+            size={15}
+            className={clsx(
+              "transition-colors",
+              bookmarked
+                ? "fill-yellow-400 text-yellow-400"
+                : "text-gray-200 group-hover:text-gray-300"
+            )}
           />
+        </button>
+      </div>
+
+      {/* Title */}
+      <h3 className="text-[15px] font-semibold text-gray-900 group-hover:text-blue-600 transition-colors leading-snug line-clamp-2 mb-3">
+        {article.title}
+      </h3>
+
+      {/* Bottom row: categories + external icon */}
+      <div className="flex items-center justify-between">
+        <div className="flex flex-wrap gap-1.5">
+          {effectiveCategories.map((cat: Category) => (
+            <span
+              key={cat}
+              className={clsx(
+                "text-[10px] font-medium uppercase tracking-wide px-2 py-0.5 rounded-full",
+                CATEGORY_COLORS[cat]
+              )}
+            >
+              {CATEGORY_LABELS[cat]}
+            </span>
+          ))}
         </div>
+        <ExternalLink
+          size={12}
+          className="text-gray-200 group-hover:text-gray-400 transition-colors shrink-0 ml-2"
+        />
       </div>
     </a>
   );
